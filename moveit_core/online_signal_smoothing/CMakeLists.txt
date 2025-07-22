@@ -47,20 +47,22 @@ ament_target_dependencies(
   srdfdom # include dependency from moveit_robot_model
   pluginlib)
 
-add_library(moveit_ruckig_filter SHARED src/ruckig_filter.cpp)
-generate_export_header(moveit_ruckig_filter)
-target_include_directories(
-  moveit_ruckig_filter PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>)
-set_target_properties(moveit_ruckig_filter
-                      PROPERTIES VERSION "${${PROJECT_NAME}_VERSION}")
-generate_parameter_library(moveit_ruckig_filter_parameters
-                           src/ruckig_filter_parameters.yaml)
-target_link_libraries(
-  moveit_ruckig_filter moveit_robot_state moveit_ruckig_filter_parameters
-  moveit_smoothing_base ruckig::ruckig)
-ament_target_dependencies(
-  moveit_ruckig_filter srdfdom # include dependency from moveit_robot_model
-  pluginlib)
+if(MOVEIT_BUILD_RUCKIG)
+  add_library(moveit_ruckig_filter SHARED src/ruckig_filter.cpp)
+  generate_export_header(moveit_ruckig_filter)
+  target_include_directories(
+    moveit_ruckig_filter PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>)
+  set_target_properties(moveit_ruckig_filter
+                        PROPERTIES VERSION "${${PROJECT_NAME}_VERSION}")
+  generate_parameter_library(moveit_ruckig_filter_parameters
+                             src/ruckig_filter_parameters.yaml)
+  target_link_libraries(
+    moveit_ruckig_filter moveit_robot_state moveit_ruckig_filter_parameters
+    moveit_smoothing_base ruckig::ruckig)
+  ament_target_dependencies(
+    moveit_ruckig_filter srdfdom # include dependency from moveit_robot_model
+    pluginlib)
+endif()
 
 # Installation
 install(DIRECTORY include/ DESTINATION include/moveit_core)
@@ -70,8 +72,10 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/moveit_acceleration_filter_export.h
         DESTINATION include/moveit_core)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/moveit_butterworth_filter_export.h
         DESTINATION include/moveit_core)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/moveit_ruckig_filter_export.h
-        DESTINATION include/moveit_core)
+if(MOVEIT_BUILD_RUCKIG)
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/moveit_ruckig_filter_export.h
+          DESTINATION include/moveit_core)
+endif()
 
 # Testing
 
