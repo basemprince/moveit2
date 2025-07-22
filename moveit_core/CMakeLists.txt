@@ -103,11 +103,13 @@ install(
 
 set(_moveit_core_plugins
     collision_detector_bullet_plugin collision_detector_fcl_plugin
+
     moveit_butterworth_filter moveit_butterworth_filter_parameters)
 if(MOVEIT_BUILD_OSQP)
   list(APPEND _moveit_core_plugins moveit_acceleration_filter
        moveit_acceleration_filter_parameters)
 endif()
+
 if(MOVEIT_BUILD_RUCKIG)
   list(APPEND _moveit_core_plugins moveit_ruckig_filter
        moveit_ruckig_filter_parameters)
@@ -136,6 +138,7 @@ set(_moveit_core_export_deps
     moveit_msgs
     octomap
     octomap_msgs
+
     pluginlib
     random_numbers
     rclcpp
@@ -155,6 +158,7 @@ set(_moveit_core_export_deps
 if(MOVEIT_BUILD_OSQP)
   list(APPEND _moveit_core_export_deps osqp)
 endif()
+
 if(MOVEIT_BUILD_RUCKIG)
   list(APPEND _moveit_core_export_deps ruckig)
 endif()
