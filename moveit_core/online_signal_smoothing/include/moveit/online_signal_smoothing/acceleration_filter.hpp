@@ -80,8 +80,10 @@ c --------x--- v   |
 #include <moveit/utils/logger.hpp>
 #include <moveit_core/moveit_acceleration_filter_parameters.hpp>
 
+#ifdef MOVEIT_HAS_OSQP
 #include <osqp.h>
 #include <types.h>
+#endif
 #include <Eigen/Sparse>
 
 namespace online_signal_smoothing

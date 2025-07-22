@@ -38,7 +38,9 @@
 #include <Eigen/Core>
 #include <list>
 #include <moveit/robot_trajectory/robot_trajectory.hpp>
+#ifdef MOVEIT_HAS_RUCKIG
 #include <ruckig/ruckig.hpp>
+#endif
 
 namespace trajectory_processing
 {
