@@ -99,54 +99,63 @@ install(
   ARCHIVE DESTINATION lib
   RUNTIME DESTINATION bin)
 
+set(_moveit_core_plugins
+    collision_detector_bullet_plugin collision_detector_fcl_plugin
+    moveit_acceleration_filter moveit_acceleration_filter_parameters
+    moveit_butterworth_filter moveit_butterworth_filter_parameters)
+if(MOVEIT_BUILD_RUCKIG)
+  list(APPEND _moveit_core_plugins moveit_ruckig_filter
+       moveit_ruckig_filter_parameters)
+endif()
+
 install(
-  TARGETS collision_detector_bullet_plugin
-          collision_detector_fcl_plugin
-          moveit_acceleration_filter
-          moveit_acceleration_filter_parameters
-          moveit_butterworth_filter
-          moveit_butterworth_filter_parameters
-          $<$<BOOL:${MOVEIT_BUILD_RUCKIG}>:moveit_ruckig_filter>
-          $<$<BOOL:${MOVEIT_BUILD_RUCKIG}>:moveit_ruckig_filter_parameters>
+
+  TARGETS ${_moveit_core_plugins}
   EXPORT moveit_core_pluginTargets
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
   RUNTIME DESTINATION bin)
 
 ament_export_targets(moveit_coreTargets HAS_LIBRARY_TARGET)
-ament_export_dependencies(
-  angles
-  Bullet
-  common_interfaces
-  eigen_stl_containers
-  Eigen3
-  eigen3_cmake_module
-  fcl
-  generate_parameter_library
-  geometric_shapes
-  geometry_msgs
-  kdl_parser
-  moveit_msgs
-  octomap
-  octomap_msgs
-  osqp
-  pluginlib
-  random_numbers
-  rclcpp
-  rsl
-  $<$<BOOL:${MOVEIT_BUILD_RUCKIG}>:ruckig>
-  sensor_msgs
-  shape_msgs
-  srdfdom
-  std_msgs
-  tf2_eigen
-  tf2_geometry_msgs
-  tf2_kdl
-  trajectory_msgs
-  urdf
-  urdfdom
-  urdfdom_headers
-  visualization_msgs)
+
+set(_moveit_core_export_deps
+    angles
+    Bullet
+    common_interfaces
+    eigen_stl_containers
+    Eigen3
+    eigen3_cmake_module
+    fcl
+    generate_parameter_library
+    geometric_shapes
+    geometry_msgs
+    kdl_parser
+    moveit_msgs
+    octomap
+    octomap_msgs
+    osqp
+    pluginlib
+    random_numbers
+    rclcpp
+    rsl
+    sensor_msgs
+    shape_msgs
+    srdfdom
+    std_msgs
+    tf2_eigen
+    tf2_geometry_msgs
+    tf2_kdl
+    trajectory_msgs
+    urdf
+    urdfdom
+    urdfdom_headers
+    visualization_msgs)
+if(MOVEIT_BUILD_RUCKIG)
+  list(APPEND _moveit_core_export_deps ruckig)
+endif()
+
+ament_export_dependencies(${_moveit_core_export_deps})
+
 
 # Plugin exports
 pluginlib_export_plugin_description_file(moveit_core
