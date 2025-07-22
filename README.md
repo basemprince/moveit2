@@ -1,3 +1,9 @@
+### Building on macOS
+MoveIt can be compiled on Apple Silicon using the `cmake/moveit_mac.cmake` toolchain.
+Ruckig and OSQP are disabled by default on macOS; enable them with `-DMOVEIT_BUILD_RUCKIG=ON` and `-DMOVEIT_BUILD_OSQP=ON` if dependencies are available.
+
+
+
 <img src="http://moveit.ros.org/assets/logo/moveit_logo-black.png" alt="MoveIt Logo" width="200"/>
 
 The [MoveIt Motion Planning Framework for ROS 2](http://moveit.ros.org).
