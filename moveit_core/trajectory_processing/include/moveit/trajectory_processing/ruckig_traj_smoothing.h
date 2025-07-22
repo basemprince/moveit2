@@ -47,4 +47,6 @@
 
 #pragma once
 #pragma message(".h header is obsolete. Please use the .hpp header instead.")
+#ifdef MOVEIT_HAS_RUCKIG
 #include <moveit/trajectory_processing/ruckig_traj_smoothing.hpp>
+#endif

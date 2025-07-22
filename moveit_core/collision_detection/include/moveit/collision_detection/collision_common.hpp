@@ -307,7 +307,7 @@ struct DistanceResultsData  // NOLINT(readability-identifier-naming) - suppress 
 };
 
 /** \brief Mapping between the names of the collision objects and the DistanceResultData. */
-using DistanceMap = std::map<const std::pair<std::string, std::string>, std::vector<DistanceResultsData> >;
+using DistanceMap = std::map<std::pair<std::string, std::string>, std::vector<DistanceResultsData>>;
 
 /** \brief Result of a distance request. */
 struct DistanceResult
@@ -362,7 +362,7 @@ struct CollisionResult
   std::size_t contact_count = 0;
 
   /** \brief A map returning the pairs of body ids in contact, plus their contact details */
-  using ContactMap = std::map<std::pair<std::string, std::string>, std::vector<Contact> >;
+  using ContactMap = std::map<std::pair<std::string, std::string>, std::vector<Contact>>;
   ContactMap contacts;
 
   /** \brief These are the individual cost sources when costs are computed */

@@ -11,6 +11,10 @@ target_include_directories(
          $<INSTALL_INTERFACE:include/moveit_core>)
 set_target_properties(moveit_trajectory_processing
                       PROPERTIES VERSION "${${PROJECT_NAME}_VERSION}")
+if(MOVEIT_BUILD_RUCKIG)
+  target_compile_definitions(moveit_trajectory_processing
+                             PUBLIC MOVEIT_HAS_RUCKIG)
+endif()
 ament_target_dependencies(
   moveit_trajectory_processing
   rclcpp
@@ -24,7 +28,16 @@ target_link_libraries(
   moveit_trajectory_processing moveit_robot_state moveit_robot_trajectory
   $<$<BOOL:${MOVEIT_BUILD_RUCKIG}>:ruckig::ruckig>)
 
-install(DIRECTORY include/ DESTINATION include/moveit_core)
+install(
+  DIRECTORY include/
+  DESTINATION include/moveit_core
+  PATTERN "ruckig_traj_smoothing.hpp" EXCLUDE
+  PATTERN "ruckig_traj_smoothing.h" EXCLUDE)
+if(MOVEIT_BUILD_RUCKIG)
+  install(FILES include/moveit/trajectory_processing/ruckig_traj_smoothing.hpp
+                include/moveit/trajectory_processing/ruckig_traj_smoothing.h
+          DESTINATION include/moveit_core/moveit/trajectory_processing)
+endif()
 
 if(BUILD_TESTING)
   find_package(ament_cmake_google_benchmark REQUIRED)

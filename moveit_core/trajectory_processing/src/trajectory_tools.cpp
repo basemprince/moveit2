@@ -35,7 +35,9 @@
 /* Author: Ioan Sucan */
 
 #include <moveit/trajectory_processing/trajectory_tools.hpp>
+#ifdef MOVEIT_HAS_RUCKIG
 #include <moveit/trajectory_processing/ruckig_traj_smoothing.hpp>
+#endif
 #include <moveit/trajectory_processing/time_optimal_trajectory_generation.hpp>
 
 #include <rclcpp/logger.hpp>
@@ -70,9 +72,19 @@ bool applyTOTGTimeParameterization(robot_trajectory::RobotTrajectory& trajectory
 bool applyRuckigSmoothing(robot_trajectory::RobotTrajectory& trajectory, double velocity_scaling_factor,
                           double acceleration_scaling_factor, bool mitigate_overshoot, double overshoot_threshold)
 {
+#ifdef MOVEIT_HAS_RUCKIG
   RuckigSmoothing time_param;
   return time_param.applySmoothing(trajectory, velocity_scaling_factor, acceleration_scaling_factor, mitigate_overshoot,
                                    overshoot_threshold);
+#else
+  RCLCPP_WARN(getLogger(), "Ruckig support disabled at build time");
+  (void)trajectory;
+  (void)velocity_scaling_factor;
+  (void)acceleration_scaling_factor;
+  (void)mitigate_overshoot;
+  (void)overshoot_threshold;
+  return false;
+#endif
 }
 
 trajectory_msgs::msg::JointTrajectory createTrajectoryMessage(const std::vector<std::string>& joint_names,
