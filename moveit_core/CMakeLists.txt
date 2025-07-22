@@ -22,7 +22,9 @@ find_package(moveit_msgs REQUIRED)
 # https://github.com/moveit/moveit2/issues/2862
 find_package(octomap 1.9.7...<1.10.0 REQUIRED)
 find_package(octomap_msgs REQUIRED)
-find_package(osqp REQUIRED)
+if(MOVEIT_BUILD_OSQP)
+  find_package(osqp REQUIRED)
+endif()
 find_package(pluginlib REQUIRED)
 find_package(random_numbers REQUIRED)
 find_package(rclcpp REQUIRED)
@@ -101,15 +103,19 @@ install(
 
 set(_moveit_core_plugins
     collision_detector_bullet_plugin collision_detector_fcl_plugin
-    moveit_acceleration_filter moveit_acceleration_filter_parameters
+
     moveit_butterworth_filter moveit_butterworth_filter_parameters)
+if(MOVEIT_BUILD_OSQP)
+  list(APPEND _moveit_core_plugins moveit_acceleration_filter
+       moveit_acceleration_filter_parameters)
+endif()
+
 if(MOVEIT_BUILD_RUCKIG)
   list(APPEND _moveit_core_plugins moveit_ruckig_filter
        moveit_ruckig_filter_parameters)
 endif()
 
 install(
-
   TARGETS ${_moveit_core_plugins}
   EXPORT moveit_core_pluginTargets
   LIBRARY DESTINATION lib
@@ -117,7 +123,6 @@ install(
   RUNTIME DESTINATION bin)
 
 ament_export_targets(moveit_coreTargets HAS_LIBRARY_TARGET)
-
 set(_moveit_core_export_deps
     angles
     Bullet
@@ -133,7 +138,7 @@ set(_moveit_core_export_deps
     moveit_msgs
     octomap
     octomap_msgs
-    osqp
+
     pluginlib
     random_numbers
     rclcpp
@@ -150,20 +155,25 @@ set(_moveit_core_export_deps
     urdfdom
     urdfdom_headers
     visualization_msgs)
+if(MOVEIT_BUILD_OSQP)
+  list(APPEND _moveit_core_export_deps osqp)
+endif()
+
 if(MOVEIT_BUILD_RUCKIG)
   list(APPEND _moveit_core_export_deps ruckig)
 endif()
 
 ament_export_dependencies(${_moveit_core_export_deps})
 
-
 # Plugin exports
 pluginlib_export_plugin_description_file(moveit_core
                                          collision_detector_fcl_description.xml)
 pluginlib_export_plugin_description_file(
   moveit_core collision_detector_bullet_description.xml)
-pluginlib_export_plugin_description_file(moveit_core
-                                         filter_plugin_acceleration.xml)
+if(MOVEIT_BUILD_OSQP)
+  pluginlib_export_plugin_description_file(moveit_core
+                                           filter_plugin_acceleration.xml)
+endif()
 pluginlib_export_plugin_description_file(moveit_core
                                          filter_plugin_butterworth.xml)
 if(MOVEIT_BUILD_RUCKIG)
