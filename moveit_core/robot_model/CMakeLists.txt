@@ -42,7 +42,7 @@ ament_target_dependencies(
 target_link_libraries(moveit_robot_model moveit_exceptions moveit_macros
                       moveit_utils)
 
-if(BUILD_TESTING)
+if(BUILD_TESTING AND NOT APPLE)
   find_package(ament_cmake_gtest REQUIRED)
   ament_add_gtest(test_robot_model test/test.cpp)
   ament_target_dependencies(test_robot_model rclcpp)

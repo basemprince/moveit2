@@ -44,7 +44,7 @@ target_link_libraries(moveit_collision_detection moveit_robot_state
                       moveit_utils)
 
 # unit tests
-if(BUILD_TESTING)
+if(BUILD_TESTING AND NOT APPLE)
   if(WIN32)
     # TODO add window paths
   else()

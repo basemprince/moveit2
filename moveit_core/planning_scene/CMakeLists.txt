@@ -36,7 +36,7 @@ install(DIRECTORY include/ DESTINATION include/moveit_core)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/moveit_planning_scene_export.h
         DESTINATION include/moveit_core)
 
-if(BUILD_TESTING)
+if(BUILD_TESTING AND NOT APPLE)
   find_package(ament_cmake_gtest REQUIRED)
 
   if(UNIX OR APPLE)

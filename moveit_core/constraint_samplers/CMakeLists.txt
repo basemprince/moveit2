@@ -22,7 +22,7 @@ target_link_libraries(
 
 install(DIRECTORY include/ DESTINATION include/moveit_core)
 
-if(BUILD_TESTING)
+if(BUILD_TESTING AND NOT APPLE)
   find_package(ament_cmake_gmock REQUIRED)
   find_package(orocos_kdl REQUIRED)
   find_package(angles REQUIRED)

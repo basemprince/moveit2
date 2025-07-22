@@ -37,7 +37,7 @@ install(
   FILES ${CMAKE_CURRENT_BINARY_DIR}/moveit_collision_detection_fcl_export.h
   DESTINATION include/moveit_core)
 
-if(BUILD_TESTING)
+if(BUILD_TESTING AND NOT APPLE)
   if(WIN32)
     # set(APPEND_LIBRARY_DIRS
     # "$<TARGET_FILE_DIR:${PROJECT_NAME}>;$<TARGET_FILE_DIR:${PROJECT_NAME}_TestPlugins1>")

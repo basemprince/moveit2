@@ -52,7 +52,6 @@ macro(MOVEIT_PACKAGE)
   option(MOVEIT_BUILD_OSQP "Build OSQP-based acceleration filter"
          ${_default_BUILD_OSQP})
 
-
   if(NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     # Enable warnings
     add_compile_options(

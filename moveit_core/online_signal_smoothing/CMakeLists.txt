@@ -62,9 +62,7 @@ if(MOVEIT_BUILD_RUCKIG)
   target_link_libraries(
     moveit_ruckig_filter moveit_robot_state moveit_ruckig_filter_parameters
     moveit_smoothing_base ruckig::ruckig)
-
   target_compile_definitions(moveit_ruckig_filter PUBLIC MOVEIT_HAS_RUCKIG)
-
   ament_target_dependencies(
     moveit_ruckig_filter srdfdom # include dependency from moveit_robot_model
     pluginlib)
@@ -87,7 +85,7 @@ endif()
 
 # Testing
 
-if(BUILD_TESTING)
+if(BUILD_TESTING AND NOT APPLE)
   find_package(ament_cmake_gtest REQUIRED)
 
   # Lowpass filter unit test

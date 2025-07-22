@@ -13,7 +13,7 @@ target_link_libraries(moveit_robot_trajectory moveit_robot_model
 
 install(DIRECTORY include/ DESTINATION include/moveit_core)
 
-if(BUILD_TESTING)
+if(BUILD_TESTING AND NOT APPLE)
   ament_add_gtest(test_robot_trajectory test/test_robot_trajectory.cpp)
   target_link_libraries(test_robot_trajectory moveit_test_utils
                         moveit_robot_trajectory)

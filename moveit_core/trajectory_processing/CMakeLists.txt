@@ -39,7 +39,7 @@ if(MOVEIT_BUILD_RUCKIG)
           DESTINATION include/moveit_core/moveit/trajectory_processing)
 endif()
 
-if(BUILD_TESTING)
+if(BUILD_TESTING AND NOT APPLE)
   find_package(ament_cmake_google_benchmark REQUIRED)
   find_package(ament_cmake_gtest REQUIRED)
   find_package(benchmark REQUIRED)

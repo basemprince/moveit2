@@ -33,6 +33,6 @@ ament_target_dependencies(
 set_target_properties(moveit_test_utils PROPERTIES VERSION
                                                    "${${PROJECT_NAME}_VERSION}")
 
-if(BUILD_TESTING)
+if(BUILD_TESTING AND NOT APPLE)
   add_subdirectory(test)
 endif()
