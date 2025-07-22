@@ -27,7 +27,10 @@ find_package(pluginlib REQUIRED)
 find_package(random_numbers REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rsl REQUIRED)
-find_package(ruckig REQUIRED)
+
+if(MOVEIT_BUILD_RUCKIG)
+  find_package(ruckig REQUIRED)
+endif()
 find_package(sensor_msgs REQUIRED)
 find_package(shape_msgs REQUIRED)
 find_package(srdfdom REQUIRED)
@@ -103,8 +106,8 @@ install(
           moveit_acceleration_filter_parameters
           moveit_butterworth_filter
           moveit_butterworth_filter_parameters
-          moveit_ruckig_filter
-          moveit_ruckig_filter_parameters
+          $<$<BOOL:${MOVEIT_BUILD_RUCKIG}>:moveit_ruckig_filter>
+          $<$<BOOL:${MOVEIT_BUILD_RUCKIG}>:moveit_ruckig_filter_parameters>
   EXPORT moveit_core_pluginTargets
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
@@ -131,7 +134,7 @@ ament_export_dependencies(
   random_numbers
   rclcpp
   rsl
-  ruckig
+  $<$<BOOL:${MOVEIT_BUILD_RUCKIG}>:ruckig>
   sensor_msgs
   shape_msgs
   srdfdom
@@ -154,6 +157,8 @@ pluginlib_export_plugin_description_file(moveit_core
                                          filter_plugin_acceleration.xml)
 pluginlib_export_plugin_description_file(moveit_core
                                          filter_plugin_butterworth.xml)
-pluginlib_export_plugin_description_file(moveit_core filter_plugin_ruckig.xml)
+if(MOVEIT_BUILD_RUCKIG)
+  pluginlib_export_plugin_description_file(moveit_core filter_plugin_ruckig.xml)
+endif()
 
 ament_package(CONFIG_EXTRAS ConfigExtras.cmake)
