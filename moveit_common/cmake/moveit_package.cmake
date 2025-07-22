@@ -40,6 +40,18 @@ macro(MOVEIT_PACKAGE)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
   set(CMAKE_CXX_EXTENSIONS OFF)
 
+  # Build optional components
+  set(_default_BUILD_RUCKIG ON)
+  set(_default_BUILD_OSQP ON)
+  if(APPLE)
+    add_compile_options(-Wno-deprecated-declarations)
+    set(_default_BUILD_RUCKIG OFF)
+    set(_default_BUILD_OSQP OFF)
+  endif()
+  option(MOVEIT_BUILD_RUCKIG "Build Ruckig support" ${_default_BUILD_RUCKIG})
+  option(MOVEIT_BUILD_OSQP "Build OSQP-based acceleration filter"
+         ${_default_BUILD_OSQP})
+
   if(NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     # Enable warnings
     add_compile_options(
