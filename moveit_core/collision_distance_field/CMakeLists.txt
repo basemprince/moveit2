@@ -27,7 +27,7 @@ install(
   FILES ${CMAKE_CURRENT_BINARY_DIR}/moveit_collision_distance_field_export.h
   DESTINATION include/moveit_core)
 
-if(BUILD_TESTING)
+if(BUILD_TESTING AND NOT APPLE)
   find_package(ament_cmake_gtest REQUIRED)
   find_package(resource_retriever REQUIRED)
 

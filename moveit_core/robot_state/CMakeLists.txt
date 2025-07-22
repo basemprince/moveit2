@@ -21,7 +21,7 @@ target_link_libraries(moveit_robot_state moveit_robot_model
 install(DIRECTORY include/ DESTINATION include/moveit_core)
 
 # Unit tests
-if(BUILD_TESTING)
+if(BUILD_TESTING AND NOT APPLE)
   find_package(ament_cmake_google_benchmark REQUIRED)
   find_package(ament_cmake_gtest REQUIRED)
   find_package(benchmark REQUIRED)

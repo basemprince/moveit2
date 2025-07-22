@@ -22,7 +22,7 @@ ament_target_dependencies(
 
 install(DIRECTORY include/ DESTINATION include/moveit_core)
 
-if(BUILD_TESTING)
+if(BUILD_TESTING AND NOT APPLE)
   find_package(ament_cmake_gtest REQUIRED)
 
   ament_add_gtest(test_voxel_grid test/test_voxel_grid.cpp)

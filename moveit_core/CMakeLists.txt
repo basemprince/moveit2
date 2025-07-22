@@ -22,12 +22,17 @@ find_package(moveit_msgs REQUIRED)
 # https://github.com/moveit/moveit2/issues/2862
 find_package(octomap 1.9.7...<1.10.0 REQUIRED)
 find_package(octomap_msgs REQUIRED)
-find_package(osqp REQUIRED)
+if(MOVEIT_BUILD_OSQP)
+  find_package(osqp REQUIRED)
+endif()
 find_package(pluginlib REQUIRED)
 find_package(random_numbers REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rsl REQUIRED)
-find_package(ruckig REQUIRED)
+
+if(MOVEIT_BUILD_RUCKIG)
+  find_package(ruckig REQUIRED)
+endif()
 find_package(sensor_msgs REQUIRED)
 find_package(shape_msgs REQUIRED)
 find_package(srdfdom REQUIRED)
@@ -96,64 +101,79 @@ install(
   ARCHIVE DESTINATION lib
   RUNTIME DESTINATION bin)
 
+set(_moveit_core_plugins
+    collision_detector_bullet_plugin collision_detector_fcl_plugin
+    moveit_butterworth_filter moveit_butterworth_filter_parameters)
+if(MOVEIT_BUILD_OSQP)
+  list(APPEND _moveit_core_plugins moveit_acceleration_filter
+       moveit_acceleration_filter_parameters)
+endif()
+if(MOVEIT_BUILD_RUCKIG)
+  list(APPEND _moveit_core_plugins moveit_ruckig_filter
+       moveit_ruckig_filter_parameters)
+endif()
+
 install(
-  TARGETS collision_detector_bullet_plugin
-          collision_detector_fcl_plugin
-          moveit_acceleration_filter
-          moveit_acceleration_filter_parameters
-          moveit_butterworth_filter
-          moveit_butterworth_filter_parameters
-          moveit_ruckig_filter
-          moveit_ruckig_filter_parameters
+  TARGETS ${_moveit_core_plugins}
   EXPORT moveit_core_pluginTargets
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
   RUNTIME DESTINATION bin)
 
 ament_export_targets(moveit_coreTargets HAS_LIBRARY_TARGET)
-ament_export_dependencies(
-  angles
-  Bullet
-  common_interfaces
-  eigen_stl_containers
-  Eigen3
-  eigen3_cmake_module
-  fcl
-  generate_parameter_library
-  geometric_shapes
-  geometry_msgs
-  kdl_parser
-  moveit_msgs
-  octomap
-  octomap_msgs
-  osqp
-  pluginlib
-  random_numbers
-  rclcpp
-  rsl
-  ruckig
-  sensor_msgs
-  shape_msgs
-  srdfdom
-  std_msgs
-  tf2_eigen
-  tf2_geometry_msgs
-  tf2_kdl
-  trajectory_msgs
-  urdf
-  urdfdom
-  urdfdom_headers
-  visualization_msgs)
+set(_moveit_core_export_deps
+    angles
+    Bullet
+    common_interfaces
+    eigen_stl_containers
+    Eigen3
+    eigen3_cmake_module
+    fcl
+    generate_parameter_library
+    geometric_shapes
+    geometry_msgs
+    kdl_parser
+    moveit_msgs
+    octomap
+    octomap_msgs
+    pluginlib
+    random_numbers
+    rclcpp
+    rsl
+    sensor_msgs
+    shape_msgs
+    srdfdom
+    std_msgs
+    tf2_eigen
+    tf2_geometry_msgs
+    tf2_kdl
+    trajectory_msgs
+    urdf
+    urdfdom
+    urdfdom_headers
+    visualization_msgs)
+if(MOVEIT_BUILD_OSQP)
+  list(APPEND _moveit_core_export_deps osqp)
+endif()
+if(MOVEIT_BUILD_RUCKIG)
+  list(APPEND _moveit_core_export_deps ruckig)
+endif()
+
+ament_export_dependencies(${_moveit_core_export_deps})
 
 # Plugin exports
 pluginlib_export_plugin_description_file(moveit_core
                                          collision_detector_fcl_description.xml)
 pluginlib_export_plugin_description_file(
   moveit_core collision_detector_bullet_description.xml)
-pluginlib_export_plugin_description_file(moveit_core
-                                         filter_plugin_acceleration.xml)
+if(MOVEIT_BUILD_OSQP)
+  pluginlib_export_plugin_description_file(moveit_core
+                                           filter_plugin_acceleration.xml)
+endif()
 pluginlib_export_plugin_description_file(moveit_core
                                          filter_plugin_butterworth.xml)
-pluginlib_export_plugin_description_file(moveit_core filter_plugin_ruckig.xml)
+if(MOVEIT_BUILD_RUCKIG)
+  pluginlib_export_plugin_description_file(moveit_core filter_plugin_ruckig.xml)
+endif()
 
 ament_package(CONFIG_EXTRAS ConfigExtras.cmake)
