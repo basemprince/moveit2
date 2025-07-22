@@ -109,6 +109,7 @@ if(MOVEIT_BUILD_RUCKIG)
 endif()
 
 install(
+
   TARGETS ${_moveit_core_plugins}
   EXPORT moveit_core_pluginTargets
   LIBRARY DESTINATION lib
@@ -116,6 +117,7 @@ install(
   RUNTIME DESTINATION bin)
 
 ament_export_targets(moveit_coreTargets HAS_LIBRARY_TARGET)
+
 set(_moveit_core_export_deps
     angles
     Bullet
@@ -153,6 +155,7 @@ if(MOVEIT_BUILD_RUCKIG)
 endif()
 
 ament_export_dependencies(${_moveit_core_export_deps})
+
 
 # Plugin exports
 pluginlib_export_plugin_description_file(moveit_core
